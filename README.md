@@ -13,6 +13,8 @@ Open source smart watch.
     - Name: STM32F303RCT6
     - digikey: 497-13304-ND
 3. IMU (SPI)
+    - Name: LSM6DSLTR
+    - digikey: 497-16705-1-ND 
 4. 4 Capacitive touch sensors (4 I/O)
     - Name: AT42QT1070-SSU 
     - digikey: AT42QT1070-SSURCT-ND 
