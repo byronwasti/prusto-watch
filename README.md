@@ -14,6 +14,11 @@ Open source smart watch.
     - digikey: 497-13304-ND
 3. IMU (SPI)
 4. 4 Capacitive touch sensors (4 I/O)
+    - Name: AT42QT1070-SSU 
+    - digikey: AT42QT1070-SSURCT-ND 
 5. LiPo battery
 6. Bluetooth (SPI)
+    - Name: BM71BLES1FC2-0002AA
+    - digikey: BM71BLES1FC2-0002AA-ND 
 7. External flash (SPI)
+
