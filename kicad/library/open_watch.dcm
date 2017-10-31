@@ -1,3 +1,14 @@
 EESchema-DOCLIB  Version 2.0
 #
+$CMP BM71BLES1FC2
+D Castellated BLE Module
+K bluetooth ble module
+F http://ww1.microchip.com/downloads/en/DeviceDoc/60001372F.pdf
+$ENDCMP
+#
+$CMP USB_microB_2040002-1
+D USB mini/micro connector
+K connector USB
+$ENDCMP
+#
 #End Doc Library
