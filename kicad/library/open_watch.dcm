@@ -6,6 +6,12 @@ K bluetooth ble module
 F http://ww1.microchip.com/downloads/en/DeviceDoc/60001372F.pdf
 $ENDCMP
 #
+$CMP RT9818A-18GV
+D 1.8V Micro-Power Voltage Detector
+K voltage detector brown out
+F http://www.richtek.com/assets/product_file/RT9818/DS9818-10.pdf
+$ENDCMP
+#
 $CMP USB_microB_2040002-1
 D USB mini/micro connector
 K connector USB
