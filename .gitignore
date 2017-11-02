@@ -2,4 +2,5 @@
 *.bak
 *.bck
 *-cache.lib
+*-rescue.lib
 
