@@ -1,0 +1,21 @@
+bq24232rgtr
+
+Pin, 	Type, 	Name, 	Side
+1, 	in, 	TS, 	left
+2,	bi, 	BAT,	left
+3, 	bi, 	BAT, 	left
+4, 	in,	nCE, 	right
+5, 	in, 	EN2,	right
+6, 	in, 	EN1,	right
+7, 	out,	nPGOOD,	top
+8, 	gnd,	VSS,	left
+9, 	out, 	nCHG,	top
+10, 	out, 	OUT,	right
+11, 	out, 	OUT,	right
+12, 	in,	ILIM,	bottom
+13, 	in, 	IN,	left
+14, 	in, 	TMR, 	bottom
+15, 	in,	ITERM,	bottom
+16, 	bi, 	ISET, 	bottom
+17,	gnd, 	PAD,	left
+
