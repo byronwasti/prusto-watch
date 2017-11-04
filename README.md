@@ -7,12 +7,28 @@ Open source smart watch.
 ## Design
 
 ## Components
+
+### Power Management
 - Battery
     - Name: RJD3032
     - digikey: 1572-1622-ND
     - V = 3.7V
     - Capacity = 200mAh
     - I (max) = 40mA
+- Battery Protection
+    - Name: BQ29732DSET
+    - digikey: 296-44132-1-ND
+- Dual channel NAND Gate
+    - Name: SN74LVC2G132DCUR
+    - digikey: 296-18802-1-ND 
+    - V = 3.3V
+    - I (quiescent) = 10uA (max)
+- Battery Charger
+- Power multiplexer
+- Voltage regulator (High power)
+- Voltage regulator (Backup power)
+
+### Screen
 - Screen (SPI + Enable)  
     - Name: LS010B7DH01
     - digikey: 425-2899-ND
@@ -28,6 +44,8 @@ Open source smart watch.
     - digikey: 296-12241-6-ND 
     - I (out) = 25mA
     - I (quiescent) = 250-400uA (1uA in shutdown)
+
+### MCU
 - Microcontroller 
     - Name: STM32F303RCT6
     - digikey: 497-13304-ND
@@ -35,6 +53,8 @@ Open source smart watch.
     - I (max) = 160mA
     - I (typ) = ~20mA
     - I (PVD) = 0.15uA (nominal)
+
+### IMU
 - IMU (SPI)
     - Name: LSM6DSLTR
     - digikey: 497-16705-1-ND 
@@ -42,12 +62,16 @@ Open source smart watch.
     - I (gyro norm) = 0.45mA
     - I (acc norm) = 85uA
     - I (power down) = 3uA
+
+### Capactive Touch
 - 4 Capacitive touch sensors (4 I/O)
     - Name: AT42QT1070-MMHR
     - digikey: AT42QT1070-MMHCT-ND 
     - V = 3.3V
     - I (@3.3V) = 434uA - 906uA
     - I (standalone) = 615uA
+
+### BLE
 - Bluetooth (SPI)
     - Name: BM71BLES1FC2-0002AA
     - digikey: BM71BLES1FC2-0002AA-ND 
@@ -55,12 +79,8 @@ Open source smart watch.
     - I (rx/tx) = 10mA (typ) 13mA (max)
     - I (reduced) = 60uA (typ)
     - I (shutdown) = 1uA (min) 2.9uA (max)
-- External flash (SPI) ???
-- Dual channel NAND Gate
-    - Name: SN74LVC2G132DCUR
-    - digikey: 296-18802-1-ND 
-    - V = 3.3V
-    - I (quiescent) = 10uA (max)
+
+### Vibration Motor
 - Vibration motor
     - Name: Adafruit Industries LLC 1201 
     - digikey: 1528-1177-ND 
@@ -74,3 +94,5 @@ Open source smart watch.
     - name: ON Semiconductor BAT54 
     - digikey: BAT54FSCT-ND 
 
+### Extra
+- External flash (SPI) ???
