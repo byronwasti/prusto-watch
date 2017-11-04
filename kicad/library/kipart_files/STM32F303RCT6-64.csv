@@ -1,4 +1,4 @@
-STM32F303RCT6
+STM32F303RCT6-64
 
 Pin,Type,Name,Side
 1,power_in,VBAT,left

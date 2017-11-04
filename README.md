@@ -44,6 +44,9 @@ Open source smart watch.
     - digikey: 296-12241-6-ND 
     - I (out) = 25mA
     - I (quiescent) = 250-400uA (1uA in shutdown)
+- Boost Converter (3.3V -> 5V for screen power) [ NOT USED ]
+    - Name: TPS61222DCKR
+    - digikey: 296-39435-1-ND 
 
 ### MCU
 - Microcontroller 

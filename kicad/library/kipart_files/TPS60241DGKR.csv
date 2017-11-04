@@ -1,0 +1,11 @@
+TPS60241DGKR
+
+Pin,Type,Name,Side
+7,bidirectional,C1+,left
+5,bidirectional,C1-,left
+8,bidirectional,C2+,right
+3,bidirectional,C2-,right
+2,input,Enable,right
+4,gnd,GND,left
+6,pwr,VIN,left
+1,pwr,VOUT,right
