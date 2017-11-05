@@ -2073,8 +2073,6 @@ $EndComp
 Wire Wire Line
 	4600 3300 5200 3300
 Wire Wire Line
-	5200 3300 5200 3900
-Wire Wire Line
 	5050 3900 6300 3900
 Wire Wire Line
 	4300 3300 3700 3300
@@ -2172,7 +2170,6 @@ Wire Wire Line
 	5050 3800 5350 3800
 Text Label 5350 3800 0    60   ~ 0
 VUSB
-Connection ~ 5200 3900
 Connection ~ 2700 6450
 Text Label 5350 4000 0    60   ~ 0
 VBATT
@@ -2581,4 +2578,7 @@ Wire Wire Line
 	5550 7750 5350 7750
 Wire Wire Line
 	5350 7650 5550 7650
+Wire Wire Line
+	5200 3300 5200 3800
+Connection ~ 5200 3800
 $EndSCHEMATC
