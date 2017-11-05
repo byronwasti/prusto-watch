@@ -69,6 +69,14 @@ Open source smart watch.
     - I (max) = 160mA
     - I (typ) = ~20mA
     - I (PVD) = 0.15uA (nominal)
+- 16MHz Crystal
+    - Name: FA-238 16.0000MB-C3 
+    - digikey: SER3686CT-ND 
+    - Load Capacitance: 18pF
+- 32.768 RTC
+    - Name: ECS-.327-12.5-34B-TR 
+    - digikey: XC1617TR-ND 
+    - Load Capacitance: 12.5pF
 
 ### IMU
 - IMU (SPI)
