@@ -17,22 +17,14 @@ Open source smart watch.
     - I (max) = 40mA
     - V (charge) = 4.2V
     - V (cutoff) = 3.0V
-- Battery Protection
-    - Name: BQ29732DSET
-    - digikey: 296-44132-1-ND
-- Dual channel NAND Gate
-    - Name: SN74LVC2G132DCUR
-    - digikey: 296-18802-1-ND 
-    - V = 3.3V
-    - I (quiescent) = 10uA (max)
 - Battery Charger
-    - Name: MCP73831T-2ACI/OT 
-    - digikey: MCP73831T-2ACI/OTCT-ND 
+    - Name: MCP73831-2ATI/MC 
+    - digikey: MCP73831-2ATI/MC-ND  
     - V = 4.2V
     - I = 100mA (prog=10K)
 - Power multiplexer
-    - Name: TPS2112APWR
-    - digikey: 296-16937-1-ND
+    - Name: TPS2113ADRBR
+    - digikey: 296-46373-1-ND 
     - I (quiescent) = 55uA
 - Voltage regulator (High power)
     - Name: TPS70933DBVR 
@@ -119,4 +111,5 @@ Open source smart watch.
     - digikey: BAT54FSCT-ND 
 
 ### Extra
-- External flash (SPI) ???
+- External flash (SPI) [ NOT SPECCED ]
+
