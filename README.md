@@ -15,6 +15,8 @@ Open source smart watch.
     - V = 3.7V
     - Capacity = 200mAh
     - I (max) = 40mA
+    - V (charge) = 4.2V
+    - V (cutoff) = 3.0V
 - Battery Protection
     - Name: BQ29732DSET
     - digikey: 296-44132-1-ND
@@ -24,9 +26,20 @@ Open source smart watch.
     - V = 3.3V
     - I (quiescent) = 10uA (max)
 - Battery Charger
+    - Name: MCP73831T-2ACI/OT 
+    - digikey: MCP73831T-2ACI/OTCT-ND 
+    - V = 4.2V
+    - I = 100mA (prog=10K)
 - Power multiplexer
+    - Name: TPS2112APWR
+    - digikey: 296-16937-1-ND
+    - I (quiescent) = 55uA
 - Voltage regulator (High power)
-- Voltage regulator (Backup power)
+    - Name: TPS70933DBVR 
+    - digikey: 296-35483-1-ND  
+    - V = 3.3V
+    - I (quiescent) = 1uA
+    - I (out) = 150mA
 
 ### Screen
 - Screen (SPI + Enable)  

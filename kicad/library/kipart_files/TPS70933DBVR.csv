@@ -1,0 +1,8 @@
+TSP70933DBVR
+
+Pin,Type,Name,Side
+3,input,EN,left
+2,gnd,GND,left
+1,pwr,IN,left
+4,nc,NC,right
+5,pwr,OUT,right

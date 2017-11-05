@@ -32,8 +32,8 @@ Pin,Type,Name,Side
 29,bidirectional,PA8,right
 30,bidirectional,PA9,right
 31,bidirectional,PA10,right
-32,bidirectional,PA11,right
-33,bidirectional,PA12,right
+32,bidirectional,PA11/USB_DM,right
+33,bidirectional,PA12/USB_DP,right
 34,bidirectional,PA13/JTMS,right
 35,gnd,VSS,left
 36,pwr,VDD,left
