@@ -69,6 +69,9 @@ Open source smart watch.
     - Name: ECS-.327-12.5-34B-TR 
     - digikey: XC1617TR-ND 
     - Load Capacitance: 12.5pF
+- 3 Color LED
+    - Name: SMLP34RGB2W3 
+    - digikey: SMLP34RGB2W3CT-ND 
 
 ### IMU
 - IMU (SPI)
