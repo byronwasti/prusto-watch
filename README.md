@@ -17,6 +17,10 @@ Open source smart watch.
     - I (max) = 40mA
     - V (charge) = 4.2V
     - V (cutoff) = 3.0V
+- Battery Clip (holder)
+    - Name: BH3000
+    - digikey: BH3000-ND 
+    - Height: ~9mm
 - Battery Charger
     - Name: MCP73831-2ATI/MC 
     - digikey: MCP73831-2ATI/MC-ND  
