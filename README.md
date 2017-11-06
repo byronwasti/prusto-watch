@@ -133,12 +133,11 @@ Power budget is the maximum average power over an hour.
 
 Sum = 20mA + 0.06mA + 0.45mA + 0.6mA + 0.6mA + 10mA + 10mA ~ 42mA
 
-Giving us a little under 0.5C draw rate, or about 2 hours of battery life minimum.
+Giving us a little under 0.25C draw rate, or about 4 hours of battery life minimum.
 
 Taking into account the lower power modes of various peripherals, we can assume: BLE=60uA, IMU=3uA, and Vibration=0.1mA (pulsed, and not very often). This gives us an average current draw of:
 
-20mA + 0.06mA + 0.45mA + 0.003mA + 0.06mA + 0.6mA + 0.1mA = 21mA => 0.25C draw rate ~ 4hrs
+20mA + 0.06mA + 0.45mA + 0.003mA + 0.06mA + 0.6mA + 0.1mA = 21mA => 0.12C draw rate ~ 10hrs
 
-Ideally we can reduce the power of our MCU dramatically, and really utilize the various sleep modes it has. We are looking for about 10 hours of battery life, or 0.1C draw rate.
-
+Ideally we can reduce the power consumption of our MCU even more, giving us extra buffer room for other components.
 
