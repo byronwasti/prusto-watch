@@ -38,10 +38,10 @@ EELAYER END
 $Descr B 17000 11000
 encoding utf-8
 Sheet 1 1
-Title ""
+Title "Open Watch"
 Date ""
 Rev ""
-Comp ""
+Comp "Byron Wasti & Alex Hoppe"
 Comment1 ""
 Comment2 ""
 Comment3 ""

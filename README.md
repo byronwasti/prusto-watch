@@ -5,6 +5,7 @@
 Open source smart watch.
 
 ## Design
+[TODO]
 
 ## Components
 
@@ -119,4 +120,25 @@ Open source smart watch.
 
 ### Extra
 - External flash (SPI) [ NOT SPECCED ]
+
+## Power Budget
+Power budget is the maximum average power over an hour.
+- MCU = 20mA
+- Power Management = 55uA + 1uA ~ 60uA
+- Screen = 15uA + 400uA ~  450uA
+- IMU = 450uA + 85uA ~ 600uA
+- Touch = 615uA
+- BLE = ~10mA
+- Vibration = ~10mA
+
+Sum = 20mA + 0.06mA + 0.45mA + 0.6mA + 0.6mA + 10mA + 10mA ~ 42mA
+
+Giving us a little under 0.5C draw rate, or about 2 hours of battery life minimum.
+
+Taking into account the lower power modes of various peripherals, we can assume: BLE=60uA, IMU=3uA, and Vibration=0.1mA (pulsed, and not very often). This gives us an average current draw of:
+
+20mA + 0.06mA + 0.45mA + 0.003mA + 0.06mA + 0.6mA + 0.1mA = 21mA => 0.25C draw rate ~ 4hrs
+
+Ideally we can reduce the power of our MCU dramatically, and really utilize the various sleep modes it has. We are looking for about 10 hours of battery life, or 0.1C draw rate.
+
 
