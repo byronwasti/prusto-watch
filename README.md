@@ -60,8 +60,8 @@ Open source smart watch.
 
 ### MCU
 - Microcontroller 
-    - Name: STM32F303RCT6
-    - digikey: 497-13304-ND
+    - Name: STM32F303C8T6 
+    - digikey: 497-15198-ND  
     - V = 3.3V
     - I (max) = 160mA
     - I (typ) = ~20mA
@@ -103,6 +103,12 @@ Open source smart watch.
     - I (rx/tx) = 10mA (typ) 13mA (max)
     - I (reduced) = 60uA (typ)
     - I (shutdown) = 1uA (min) 2.9uA (max)
+
+- Brown Out Detection
+    - Name: RT9818A-18GV
+    - digikey: RT9818A-18GV-ND 
+    - V (threshold) = 1.8V
+    - I (quiescent) = 3uA
 
 ### Vibration Motor
 - Vibration motor
