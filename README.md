@@ -96,9 +96,17 @@ Open source smart watch.
     - I (standalone) = 615uA
 
 ### BLE
-- Bluetooth (SPI)
+- Bluetooth (UART)
     - Name: BM71BLES1FC2-0002AA
     - digikey: BM71BLES1FC2-0002AA-ND 
+    - V = 3.3V
+    - I (rx/tx) = 10mA (typ) 13mA (max)
+    - I (reduced) = 60uA (typ)
+    - I (shutdown) = 1uA (min) 2.9uA (max)
+
+- Bluetooth (UART)
+    - Name: RN4871-V
+    - digikey: RN4871-V/RM118-ND 
     - V = 3.3V
     - I (rx/tx) = 10mA (typ) 13mA (max)
     - I (reduced) = 60uA (typ)
