@@ -77,6 +77,9 @@ Open source smart watch.
 - 3 Color LED
     - Name: SMLP34RGB2W3 
     - digikey: SMLP34RGB2W3CT-ND 
+- Push Button
+    - Name: PTS820 J15M SMTR LFS 
+    - digikey: CKN10506CT-ND 
 
 ### IMU
 - IMU (SPI)

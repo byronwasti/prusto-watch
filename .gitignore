@@ -3,4 +3,5 @@
 *.bck
 *-cache.lib
 *-rescue.lib
+*.kicad_pcb-bak
 
