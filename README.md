@@ -23,8 +23,8 @@ Open source smart watch.
     - digikey: BH3000-ND 
     - Height: ~9mm
 - Battery Charger
-    - Name: MCP73831-2ATI/MC 
-    - digikey: MCP73831-2ATI/MC-ND  
+    - Name:  MCP73831T-2ACI/OT 
+    - digikey: MCP73831T-2ACI/OTCT-ND 
     - V = 4.2V
     - I = 100mA (prog=10K)
 - Power multiplexer
