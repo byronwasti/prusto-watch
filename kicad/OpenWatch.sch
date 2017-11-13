@@ -1093,9 +1093,9 @@ IMU_SDI
 Wire Wire Line
 	5550 8950 5350 8950
 Wire Wire Line
-	5550 8850 5350 8850
+	5350 8850 6000 8850
 Wire Wire Line
-	5550 9050 5350 9050
+	5350 9050 6000 9050
 $Comp
 L WM1389CT-ND U8
 U 1 1 59FCDFE3
@@ -1219,14 +1219,10 @@ Wire Wire Line
 	14650 4850 14850 4850
 Text Notes 13500 5200 0    60   ~ 0
 -What is EXTCOMIN used for?\n-How do we verify the pitch for the FPC?\n
-Text Label 5550 7950 0    60   ~ 0
+Text Label 6000 8850 0    60   ~ 0
 DISP_SDI
-Text Label 5550 8150 0    60   ~ 0
+Text Label 6000 9050 0    60   ~ 0
 DISP_SCLK
-Wire Wire Line
-	5350 8150 5550 8150
-Wire Wire Line
-	5550 7950 5350 7950
 $Comp
 L GND #PWR030
 U 1 1 59FD8E8F
@@ -1381,7 +1377,6 @@ Text Notes 8950 750  0    60   ~ 0
 Capacitive Touch\n
 Wire Wire Line
 	2700 6150 2700 6850
-NoConn ~ 5350 8050
 Wire Wire Line
 	5350 7050 5500 7050
 Wire Wire Line
@@ -1779,25 +1774,10 @@ F 3 "" H 12150 4000 50  0001 C CNN
 $EndComp
 Text Notes 900  5600 0    60   ~ 0
 Microcontroller\n
-$Comp
-L Conn_01x02 J7
-U 1 1 59FEEB4F
-P 15050 4000
-F 0 "J7" V 15050 4100 50  0000 C CNN
-F 1 "Conn_01x02" V 15050 3550 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x02_Pitch1.00mm" H 15050 4000 50  0001 C CNN
-F 3 "" H 15050 4000 50  0001 C CNN
-	1    15050 4000
-	0    -1   -1   0   
-$EndComp
 Wire Wire Line
-	14650 4350 15050 4350
+	15050 4350 14650 4350
 Wire Wire Line
-	15050 4350 15050 4200
-Wire Wire Line
-	14650 4550 15150 4550
-Wire Wire Line
-	15150 4550 15150 4200
+	15050 4100 15050 4350
 $Comp
 L TSP70933DBVR U3
 U 1 1 59FEFFE9
@@ -2332,7 +2312,6 @@ IMU_INT_1
 Text Label 14350 2400 2    60   ~ 0
 IMU_INT_2
 NoConn ~ 5350 9150
-NoConn ~ 5350 8250
 $Comp
 L GND #PWR059
 U 1 1 5A001946
@@ -2516,4 +2495,26 @@ Wire Wire Line
 	12150 4000 12150 4150
 Wire Wire Line
 	12150 4150 12200 4150
+$Comp
+L +5V #PWR?
+U 1 1 5A0A3934
+P 15050 4100
+F 0 "#PWR?" H 15050 3950 50  0001 C CNN
+F 1 "+5V" H 15050 4240 50  0000 C CNN
+F 2 "" H 15050 4100 50  0001 C CNN
+F 3 "" H 15050 4100 50  0001 C CNN
+	1    15050 4100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	14650 4550 14850 4550
+Text Label 14850 4550 0    60   ~ 0
+EXTCOMIN
+Text Label 5550 7950 0    60   ~ 0
+EXTCOMIN
+Wire Wire Line
+	5550 7950 5350 7950
+NoConn ~ 5350 8050
+NoConn ~ 5350 8150
+NoConn ~ 5350 8250
 $EndSCHEMATC
