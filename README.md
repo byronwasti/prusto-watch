@@ -11,17 +11,17 @@ Open source smart watch.
 
 ### Power Management
 - Battery
-    - Name: RJD3032
-    - digikey: 1572-1622-ND
+    - Name: RJD3032HPPV30M  
+    - digikey: 1572-1623-ND  
     - V = 3.7V
     - Capacity = 200mAh
     - I (max) = 40mA
     - V (charge) = 4.2V
     - V (cutoff) = 3.0V
-- Battery Clip (holder)
-    - Name: BH3000
-    - digikey: BH3000-ND 
-    - Height: ~9mm
+- Battery Connector
+    - Name:  Molex 0532610271 
+    - digikey:  WM7620CT-ND  
+    - Height: 3.4mm
 - Battery Charger
     - Name:  MCP73831T-2ACI/OT 
     - digikey: MCP73831T-2ACI/OTCT-ND 
