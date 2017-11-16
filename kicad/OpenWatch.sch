@@ -1276,9 +1276,9 @@ Wire Wire Line
 	1800 1800 1800 1850
 Connection ~ 1800 1850
 Text Label 2825 1100 0    60   ~ 0
-D+
+D_N
 Text Label 2825 1200 0    60   ~ 0
-D-
+D_P
 Wire Wire Line
 	2825 1200 2700 1200
 Wire Wire Line
@@ -2038,7 +2038,7 @@ U 1 1 59FFA37C
 P 1700 3600
 F 0 "BT1" H 1800 3700 50  0000 L CNN
 F 1 "Battery_Cell" H 1800 3600 50  0000 L CNN
-F 2 "open_watch:Molex-0532610271" V 1700 3660 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02_Pitch2.00mm" V 1700 3660 50  0001 C CNN
 F 3 "" V 1700 3660 50  0001 C CNN
 	1    1700 3600
 	1    0    0    -1  
@@ -2238,11 +2238,11 @@ microUSB\n
 Text Notes 7200 9150 0    60   ~ 0
 Bypass Capacitors\n
 Text Label 5500 7550 0    60   ~ 0
-D-
+D_N
 Wire Wire Line
 	5350 7550 5500 7550
 Text Label 5500 7450 0    60   ~ 0
-D+
+D_P
 Wire Wire Line
 	5500 7450 5350 7450
 $Comp
