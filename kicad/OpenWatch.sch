@@ -2287,10 +2287,8 @@ Text Label 1050 4100 2    60   ~ 0
 VUSB
 Text Label 2300 4100 0    60   ~ 0
 BATT_EN
-Text Label 5600 9350 0    60   ~ 0
+Text Label 5500 6950 0    60   ~ 0
 BATT_EN
-Wire Wire Line
-	5350 9350 5600 9350
 Text Notes 1500 5150 0    60   ~ 0
 Allow for\ncompletely\nturning off \nthe battery\n
 Wire Wire Line
@@ -2591,5 +2589,7 @@ Wire Wire Line
 NoConn ~ 5350 9650
 Wire Wire Line
 	5600 8150 5350 8150
-NoConn ~ 5350 6950
+Wire Wire Line
+	5500 6950 5350 6950
+NoConn ~ 5350 9350
 $EndSCHEMATC
