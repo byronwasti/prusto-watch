@@ -1,0 +1,32 @@
+[package]
+authors = ["Byron Wasti, Alex Hoppe"]
+categories = [
+    "embedded",
+    "no-std",
+]
+description = ""
+keywords = [
+    "arm",
+    "cortex-m",
+    "template",
+]
+license = "MIT OR Apache-2.0"
+name = "cortex-m-quickstart"
+repository = "https://github.com/japaric/cortex-m-quickstart"
+version = "0.2.1"
+
+[dependencies]
+stm32f30x = "0.5.1"
+
+[dependencies.cortex-m]
+version = "0.3.0"
+
+[dependencies.cortex-m-rt]
+features = ["abort-on-panic"]
+version = "0.3.3"
+
+[dependencies.cortex-m-semihosting]
+version = "0.2.0"
+[profile.release]
+debug = true
+lto = true
