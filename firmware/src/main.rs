@@ -26,21 +26,6 @@ const FREQUENCY: u32 = 1;
 
 #[inline(never)]
 fn main() {
-    /*
-    let mut stdout = hio::hstdout().unwrap();
-    writeln!(stdout, "Hello!").unwrap();
-
-    cortex_m::interrupt::free(
-        |cs| {
-            let gpioa = GPIOA.borrow(cs);
-            gpioa.moder.modify(|_, w| w.moder9().output());
-
-            gpioa.bsrr.write(|w| w.br9().reset());
-    });
-
-    loop {
-    }
-    */
     // Critical section, this closure is non-preemptable
     cortex_m::interrupt::free(
         |cs| {
