@@ -7,14 +7,14 @@
 extern crate cortex_m;
 extern crate cortex_m_rt;
 //extern crate cortex_m_semihosting;
-extern crate stm32f30x;
+extern crate stm32f303;
 
 use core::fmt::Write;
 use core::u16;
 
 use cortex_m::asm;
 //use cortex_m_semihosting::hio;
-use stm32f30x::{GPIOA, RCC, TIM7};
+use stm32f303::{GPIOA, RCC, TIM7};
 
 mod frequency {
     /// Frequency of APB1 bus (TIM7 is connected to this bus)
