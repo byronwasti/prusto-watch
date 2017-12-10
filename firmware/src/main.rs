@@ -6,14 +6,14 @@
 // version = "0.2.0", default-features = false
 extern crate cortex_m;
 extern crate cortex_m_rt;
-extern crate cortex_m_semihosting;
+//extern crate cortex_m_semihosting;
 extern crate stm32f30x;
 
 use core::fmt::Write;
 use core::u16;
 
 use cortex_m::asm;
-use cortex_m_semihosting::hio;
+//use cortex_m_semihosting::hio;
 use stm32f30x::{GPIOA, RCC, TIM7};
 
 mod frequency {
@@ -65,15 +65,15 @@ fn main() {
                 // Toggle the state
                 state = !state;
 
-                let mut stdout = hio::hstdout().unwrap();
+                //let mut stdout = hio::hstdout().unwrap();
 
                 // Blink the LED
                 if state {
                     gpioa.bsrr.write(|w| w.br9().reset());
-                    writeln!(stdout, "On").unwrap();
+                    //writeln!(stdout, "On").unwrap();
                 } else {
                     gpioa.bsrr.write(|w| w.bs9().set());
-                    writeln!(stdout, "Off").unwrap();
+                    //writeln!(stdout, "Off").unwrap();
                 }
             }
         },
