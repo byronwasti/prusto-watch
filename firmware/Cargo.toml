@@ -15,9 +15,10 @@ version = "0.1.0"
 cortex-m = "0.3.1"
 cortex-m-rtfm = "0.2.2"
 
-[dependencies.stm32f303]
+[dependencies.stm32f30x]
 features = ["rt"]
-path = "../stm32f303"
+version = "0.5.1"
+#path = "../stm32f303"
 
 [dependencies.cortex-m-rt]
 features = ["abort-on-panic"]
