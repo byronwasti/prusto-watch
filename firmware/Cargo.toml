@@ -5,18 +5,19 @@ categories = [
     "no-std",
 ]
 description = ""
-keywords = [
-    "arm",
-    "cortex-m",
-    "template",
-]
+keywords = []
 license = "MIT OR Apache-2.0"
-name = "cortex-m-quickstart"
-repository = "https://github.com/japaric/cortex-m-quickstart"
-version = "0.2.1"
+name = "open-watch"
+repository = ""
+version = "0.1.0"
 
-[dependencies.cortex-m]
-version = "0.3.0"
+[dependencies]
+cortex-m = "0.3.1"
+cortex-m-rtfm = "0.2.2"
+
+[dependencies.stm32f303]
+features = ["rt"]
+path = "../stm32f303"
 
 [dependencies.cortex-m-rt]
 features = ["abort-on-panic"]
@@ -24,9 +25,6 @@ version = "0.3.3"
 
 [dependencies.cortex-m-semihosting]
 version = "0.2.0"
-
-[dependencies.stm32f303]
-path = "../stm32f303"
 
 [profile.release]
 debug = true
