@@ -1,3 +1,0 @@
-(fp_lib_table
-  (lib (name open_watch)(type KiCad)(uri "$(KIPRJMOD)/library/open_watch.pretty")(options "")(descr ""))
-)

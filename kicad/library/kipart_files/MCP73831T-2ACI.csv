@@ -1,8 +1,0 @@
-MCP73831T-2ACI
-
-Pin,Type,Name,Side
-4,pwr,VDD,left
-3,pwr,VBAT,right
-1,output,STAT,left
-2,gnd,VSS,right
-5,input,PROG,right

@@ -1,12 +1,6 @@
-*.swp
-*.bak
-*.bck
-*-cache.lib
-*-rescue.lib
-*.kicad_pcb-bak
-
 **/*.rs.bk
 .gdb_history
 Cargo.lock
 target/
+*.swp
 
