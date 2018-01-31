@@ -23,7 +23,7 @@ version = "0.5.1"
 
 [dependencies.cortex-m-rt]
 features = ["abort-on-panic"]
-version = "0.3.3"
+version = "0.3.8"
 
 [profile.dev]
 codegen-units = 1
