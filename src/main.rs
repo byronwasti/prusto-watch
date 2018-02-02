@@ -2,14 +2,15 @@
 #![no_std]
 
 extern crate cortex_m_rtfm as rtfm;
-//extern crate stm32f30x;
 extern crate stm32f30x_hal as hal;
 extern crate cortex_m_semihosting;
 
 use core::u16;
 use rtfm::{app, Threshold};
+use hal::prelude::*;
 use hal::stm32f30x;
-use hal::serial::{Serial, Rx, Tx};
+use hal::timer::{Timer, Event};
+//use hal::serial::{Serial, Rx, Tx};
 
 use stm32f30x::{GPIOA};
 
@@ -22,7 +23,7 @@ app! {
     resources: {
         static VAL: bool = false;
         static COUNTER: u32 = 0;
-        static LED: GPIOA;
+        static LED: hal::gpio::gpioa::PA9<hal::gpio::Output<hal::gpio::PushPull>>;
     },
 
     idle: {
@@ -38,29 +39,21 @@ app! {
 }
 
 fn init(p: init::Peripherals, r: init::Resources) -> init::LateResources {
-    let gpioa = p.device.GPIOA;
-    let rcc = p.device.RCC;
-    let tim7 = p.device.TIM7;
+    let mut rcc = p.device.RCC.constrain();
+    let mut flash = p.device.FLASH.constrain();
+    let mut gpioa = p.device.GPIOA.split(&mut rcc.ahb);
 
-    rcc.ahbenr.modify(|_, w| w.iopaen().enabled());
-    rcc.apb1enr.modify(|_, w| w.tim7en().enabled());
+    let clocks = rcc.cfgr.freeze(&mut flash.acr);
+    let mut timer = Timer::tim7(p.device.TIM7, 1.hz(), clocks, &mut rcc.apb1);
+    timer.listen(Event::TimeOut);
 
-    gpioa.moder.modify(|_, w| w.moder9().output());
 
-    let ratio = 8_000_000;
-    //let psc = ((ratio - 1) /(u16::MAX as u32)) as u16;
-    let psc = u16::MAX - 100;
-    tim7.psc.write(|w| w.psc().bits(psc));
-    let arr = (ratio / ((psc + 1) as u32)) as u16;
-    tim7.arr.write(|w| w.arr().bits(arr));
-    tim7.cr1.write(|w| w.opm().continuous());
-
-    tim7.dier.write(|w| w.uie().bit(true));
-
-    tim7.cr1.modify(|_, w| w.cen().enabled());
+    let mut led = gpioa
+        .pa9
+        .into_push_pull_output(&mut gpioa.moder, &mut gpioa.otyper);
 
     init::LateResources {
-        LED: gpioa,
+        LED: led,
     }
 }
 
@@ -75,11 +68,13 @@ fn toggle(t: &mut Threshold, mut r: TIM7::Resources) {
         *r.VAL = !*r.VAL;
         *r.COUNTER = 0;
 
-        let gpioa = r.LED;
+        //let gpioa = r.LED;
         if *r.VAL {
-            gpioa.bsrr.write(|w| w.bs9().set());
+            r.LED.set_high();
+            //gpioa.bsrr.write(|w| w.bs9().set());
         } else {
-            gpioa.bsrr.write(|w| w.br9().reset());
+            r.LED.set_low();
+            //gpioa.bsrr.write(|w| w.br9().reset());
         }
     } else {
         *r.COUNTER += 1;
