@@ -12,18 +12,18 @@ repository = ""
 version = "0.1.0"
 
 [dependencies]
-cortex-m = "0.3.1"
-cortex-m-rtfm = "0.2.2"
+cortex-m = "0.4"
+cortex-m-rtfm = "0.3"
 cortex-m-semihosting = "0.2.0"
-
-[dependencies.stm32f30x]
-features = ["rt"]
-version = "0.5.1"
-#path = "../stm32f303"
+stm32f30x-hal = "0.1.1"
 
 [dependencies.cortex-m-rt]
 features = ["abort-on-panic"]
-version = "0.3.8"
+version = "0.3.12"
+
+[dependencies.stm32f30x]
+features = ["rt"]
+version = "0.6"
 
 [profile.dev]
 codegen-units = 1

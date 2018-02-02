@@ -2,11 +2,16 @@
 #![no_std]
 
 extern crate cortex_m_rtfm as rtfm;
-extern crate stm32f30x;
+//extern crate stm32f30x;
+extern crate stm32f30x_hal as hal;
 extern crate cortex_m_semihosting;
 
 use core::u16;
 use rtfm::{app, Threshold};
+use hal::stm32f30x;
+use hal::serial::{Serial, Rx, Tx};
+
+use stm32f30x::{GPIOA};
 
 use core::fmt::Write;
 use cortex_m_semihosting::hio;
@@ -15,22 +20,27 @@ app! {
     device: stm32f30x,
 
     resources: {
-        static ON: bool = false;
+        static VAL: bool = false;
         static COUNTER: u32 = 0;
+        static LED: GPIOA;
+    },
+
+    idle: {
+        resources: [VAL],
     },
 
     tasks: {
         TIM7: {
             path: toggle,
-            resources: [ON, COUNTER, GPIOA],
+            resources: [VAL, COUNTER, LED],
         },
     },
 }
 
-fn init(p: init::Peripherals, _r: init::Resources) {
-    let gpioa = p.GPIOA;
-    let rcc = p.RCC;
-    let tim7 = p.TIM7;
+fn init(p: init::Peripherals, r: init::Resources) -> init::LateResources {
+    let gpioa = p.device.GPIOA;
+    let rcc = p.device.RCC;
+    let tim7 = p.device.TIM7;
 
     rcc.ahbenr.modify(|_, w| w.iopaen().enabled());
     rcc.apb1enr.modify(|_, w| w.tim7en().enabled());
@@ -48,27 +58,31 @@ fn init(p: init::Peripherals, _r: init::Resources) {
     tim7.dier.write(|w| w.uie().bit(true));
 
     tim7.cr1.modify(|_, w| w.cen().enabled());
+
+    init::LateResources {
+        LED: gpioa,
+    }
 }
 
-fn idle() -> ! {
+fn idle(t: &mut Threshold, r: idle::Resources) -> ! {
     loop {
         rtfm::wfi();
     }
 }
 
-fn toggle(_t: &mut Threshold, r: TIM7::Resources) {
-    if (**r.COUNTER > 10000) {
-        // Toggle our state
-        **r.ON = !**r.ON;
-        **r.COUNTER = 0;
-        let gpioa = &**r.GPIOA;
-        if **r.ON {
+fn toggle(t: &mut Threshold, mut r: TIM7::Resources) {
+    if *r.COUNTER > 10000 {
+        *r.VAL = !*r.VAL;
+        *r.COUNTER = 0;
+
+        let gpioa = r.LED;
+        if *r.VAL {
             gpioa.bsrr.write(|w| w.bs9().set());
         } else {
             gpioa.bsrr.write(|w| w.br9().reset());
         }
     } else {
-        **r.COUNTER += 1;
+        *r.COUNTER += 1;
     }
 }
 
