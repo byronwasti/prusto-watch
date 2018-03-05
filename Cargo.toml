@@ -17,7 +17,11 @@ cortex-m-rtfm = "0.3"
 cortex-m-semihosting = "0.2.0"
 embedded-hal = "0.1.0"
 nb = "0.1.1"
-stm32f30x-hal = "0.1.1"
+#stm32f30x-hal = "0.1.2"
+stm32f30x-hal = { path = "../stm32f30x-hal" }
+
+[dev-dependencies]
+rn4870 = { path = "../rn4870" }
 
 [dependencies.cortex-m-rt]
 features = ["abort-on-panic"]

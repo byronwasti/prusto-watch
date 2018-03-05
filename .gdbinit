@@ -1,5 +1,4 @@
 target remote :3333
-
 monitor arm semihosting enable
 
 # # send captured ITM to the file itm.fifo
