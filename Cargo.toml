@@ -15,21 +15,26 @@ version = "0.1.0"
 cortex-m = "0.4"
 cortex-m-rtfm = "0.3"
 cortex-m-semihosting = "0.2.0"
-embedded-hal = "0.1.0"
 nb = "0.1.1"
-#stm32f30x-hal = "0.1.2"
-stm32f30x-hal = { path = "../stm32f30x-hal" }
 
 [dev-dependencies]
-rn4870 = { path = "../rn4870" }
+embedded-hal = "0.1.2"
 
 [dependencies.cortex-m-rt]
 features = ["abort-on-panic"]
 version = "0.3.12"
+embedded-hal = "0.1.2"
 
 [dependencies.stm32f30x]
 features = ["rt"]
 version = "0.6"
+
+[dependencies.stm32f30x-hal]
+path = "../stm32f30x-hal"
+
+[dev-dependencies.rn4870]
+path = "../rn4870"
+
 [profile.dev]
 codegen-units = 1
 incremental = false

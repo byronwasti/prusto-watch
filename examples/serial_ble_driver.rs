@@ -51,8 +51,18 @@ fn main() {
         _ => panic!(),
     }
 
-    ble.enter_cmd_mode().unwrap();
-    //ble.handle_error(|uart| { uart.clear_overflow_error(); } );
+    /*
+    match ble.enter_cmd_mode() {
+        Ok(()) => {},
+        Err(rn4870::Error::Read(hal::serial::Error::Overrun)) => {
+            ble.handle_error(|uart| { uart.clear_overflow_error(); } );
+        },
+        _ => panic!(),
+    }
+    */
+
+    loop {
+    }
 
     // Break
     asm::bkpt()
