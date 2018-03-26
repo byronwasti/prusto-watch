@@ -35,6 +35,9 @@ path = "../stm32f30x-hal"
 [dev-dependencies.rn4870]
 path = "../rn4870"
 
+[dev-dependencies.ls010b7dh01]
+path = "../ls010b7dh01"
+
 [profile.dev]
 codegen-units = 1
 incremental = false

@@ -134,6 +134,14 @@ version = "0.2.39"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
+name = "ls010b7dh01"
+version = "0.1.0"
+dependencies = [
+ "embedded-hal 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "nb 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "nb"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -179,6 +187,7 @@ dependencies = [
  "cortex-m-rtfm 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "cortex-m-semihosting 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "embedded-hal 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "ls010b7dh01 0.1.0",
  "nb 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "rn4870 0.1.0",
  "stm32f30x 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",

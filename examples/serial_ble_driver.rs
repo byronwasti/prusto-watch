@@ -44,30 +44,36 @@ fn main() {
     let mut ble = rn4870::Rn4870::new(serial, reset_ble);
 
     let result = ble.hard_reset(&mut delay);
-    //if result.is_err() { panic!("Error"); }
+    if result.is_err() { panic!("Error"); }
 
     let result = ble.enter_cmd_mode();
-    //if result.is_err() { panic!("Error"); }
+    if result.is_err() { panic!("Error"); }
 
     let result = ble.set_name("byron");
-    //if result.is_err() { panic!("Error"); }
+    if result.is_err() { panic!("Error"); }
 
     let result = ble.set_default_services(0);
-    //if result.is_err() { panic!("Error"); }
+    if result.is_err() { panic!("Error"); }
 
     let result = ble.enter_data_mode();
-    //if result.is_err() { panic!("Error"); }
+    if result.is_err() { panic!("Error"); }
+
+    delay.delay_ms(200u16);
 
     // Echo response
     loop {
         match ble.read_raw() {
             Ok(val) => {
-                ble.send_raw(val);
+                ble.send_raw(&[b'r', b':', val]);
             },
             Err(hal::serial::Error::Overrun) => {
                 ble.handle_error(|uart| { uart.clear_overflow_error(); } );
+                ble.send_raw(&"overflow".as_bytes());
             },
-            _ => panic!(),
+            _ => {
+                ble.send_raw(&"panic".as_bytes());
+                panic!();
+            }
         }
     }
 
