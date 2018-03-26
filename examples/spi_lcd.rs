@@ -3,6 +3,7 @@
 extern crate cortex_m;
 extern crate stm32f30x_hal as hal;
 extern crate embedded_hal;
+extern crate ls010b7dh01;
 #[macro_use(block)]
 extern crate nb;
 
@@ -22,6 +23,7 @@ fn main() {
     let mut flash = p.FLASH.constrain();
     let mut rcc = p.RCC.constrain();
     let mut gpioa = p.GPIOA.split(&mut rcc.ahb);
+    let mut gpiob = p.GPIOB.split(&mut rcc.ahb);
 
     // clock configuration using the default settings (all clocks run at 8 MHz)
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
@@ -30,17 +32,23 @@ fn main() {
     let mut delay = Delay::new(cp.SYST, clocks);
 
     // Set up DISP_EN (Active high)
-    let mut pa3 = gpioa
-        .pa3
-        .into_push_pull_output(&mut gpioa.moder, &mut gpioa.otyper); // DISP_EN
+    let mut disp_en = gpiob
+        .pb14
+        .into_push_pull_output(&mut gpiob.moder, &mut gpiob.otyper); // DISP_EN
 
-    pa3.set_high();
+    disp_en.set_high();
 
     // Set up our CS (Active high)
-    let mut pa2 = gpioa
-        .pa2
-        .into_push_pull_output(&mut gpioa.moder, &mut gpioa.otyper); // CS
-    pa2.set_low();
+    let mut cs = gpiob
+        .pb2
+        .into_push_pull_output(&mut gpiob.moder, &mut gpiob.otyper); // CS
+    cs.set_low();
+
+    // Set up 5V_en
+    let mut v5_en = gpioa
+        .pa1
+        .into_push_pull_output(&mut gpioa.moder, &mut gpioa.otyper); // 5V_en
+    v5_en.set_high();
 
     // Set up SPI
     let pa5 = gpioa
@@ -76,26 +84,26 @@ fn main() {
     let set_display = [0x00, 0x00];
 
     // Send data
-    pa2.set_high();
+    cs.set_high();
     spi.write(&clear_data);
     //delay.delay_ms(5_u16);
-    pa2.set_low();
+    cs.set_low();
 
     asm::bkpt();
 
     // Send data
-    pa2.set_high();
+    cs.set_high();
     spi.write(&set_line_value);
     //delay.delay_ms(5_u16);
-    pa2.set_low();
+    cs.set_low();
 
     asm::bkpt();
 
     // Send data
-    pa2.set_high();
+    cs.set_high();
     spi.write(&set_display);
     //delay.delay_ms(5_u16);
-    pa2.set_low();
+    cs.set_low();
 
     asm::bkpt()
 }
