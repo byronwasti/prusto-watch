@@ -61,6 +61,8 @@ fn main() {
     let mode = ls010b7dh01::MODE;
     let spi = Spi::spi1(p.SPI1, (pa5, pa6, pa7), mode, 1.mhz(), clocks, &mut rcc.apb2);
 
+    //asm::bkpt();
+
     // Driver
     let mut display = Ls010b7dh01::new(spi, cs, disp_en);
 
@@ -75,8 +77,22 @@ fn main() {
     delay.delay_ms(1000u16);
 
     display.clear();
-    display.write_data();
+    display.write_checkerboard();
     display.flush_buffer();
+
+    delay.delay_ms(1000u16);
+    display.clear();
+    display.draw_rect(60, 60, 8, 8);
+    display.flush_buffer();
+
+    delay.delay_ms(1000u16);
+    display.clear();
+    display.draw_circle(64, 64, 20);
+    display.draw_circle(64, 64, 25);
+    display.draw_circle(64, 64, 30);
+    display.draw_circle(64, 64, 35);
+    display.flush_buffer();
+
 
 
     loop {
