@@ -2,9 +2,10 @@
 #![no_std]
 extern crate cortex_m;
 extern crate cortex_m_rt;
-extern crate panic_abort;
 extern crate stm32f30x_hal as hal;
 extern crate ls010b7dh01;
+extern crate panic_abort;
+extern crate embedded_graphics as graphics;
 
 use cortex_m::asm;
 use hal::prelude::*;
@@ -13,7 +14,16 @@ use hal::stm32f30x;
 use hal::delay::Delay;
 use ls010b7dh01::Ls010b7dh01;
 
+use graphics::prelude::*;
+use graphics::Drawing;
+use graphics::primitives::{Circle, Line, Rect};
+use graphics::fonts::{Font, Font6x8};
+use graphics::transform::Transform;
+use graphics::image::Image1BPP;
+
 fn main() {
+    //asm::bkpt();
+
     let cp = cortex_m::Peripherals::take().unwrap();
     let p = stm32f30x::Peripherals::take().unwrap();
 
@@ -29,23 +39,26 @@ fn main() {
     let mut delay = Delay::new(cp.SYST, clocks);
 
     // Set up DISP_EN (Active high)
-    let disp_en = gpiob
+    let mut disp_en = gpiob
         .pb2
         .into_push_pull_output(&mut gpiob.moder, &mut gpiob.otyper); // DISP_EN
+    disp_en.set_low();
 
     let mut extcomin = gpiob
         .pb1
         .into_push_pull_output(&mut gpiob.moder, &mut gpiob.otyper);
 
     // Set up our CS (Active high)
-    let cs = gpiob
+    let mut cs = gpiob
         .pb0
         .into_push_pull_output(&mut gpiob.moder, &mut gpiob.otyper); // CS
+    cs.set_low();
 
     // Set up 5V_en
     let mut v5_en = gpioa
         .pa3
         .into_push_pull_output(&mut gpioa.moder, &mut gpioa.otyper); // 5V_en
+    v5_en.set_low();
     v5_en.set_high();
 
     // Set up SPI
@@ -66,39 +79,30 @@ fn main() {
 
     // Driver
     let mut display = Ls010b7dh01::new(spi, cs, disp_en);
-    asm::bkpt();
 
     display.disable();
-
-    delay.delay_ms(1000u16);
-
+    delay.delay_ms(200u16);
     display.enable();
     display.clear();
+    display.flush_buffer();
 
-    let mut r = 5;
-    let mut grow = true;
-    let amount = 5;
-    //let mut previous = 5;
+    let bpp = Image1BPP::new(include_bytes!("../data/face_1bpp_neg.raw"), 120, 120).translate((0, 0));
+    display.draw(bpp.into_iter());
+
+    display.flush_buffer();
+    
+    let mut i = 0;
+    let mut pulse = false;
     loop {
-        delay.delay_ms(200u16);
-        //display.clear();
-        display.draw_circle(64, 64, r, grow);
-        display.flush_buffer();
-
-        if r > 60 {
-            grow = false
-        } else if r < 10{
-            grow = true
-        }
-
-        if grow {
-            r += amount
+        if pulse {
+            extcomin.set_high();
         } else {
-            r -= amount
+            extcomin.set_low();
         }
-    }
+        pulse = !pulse;
 
-    asm::bkpt();
+        delay.delay_ms(500u16);
+    }
 }
 
 #[link_section = ".vector_table.interrupts"]

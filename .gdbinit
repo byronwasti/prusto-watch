@@ -1,4 +1,7 @@
 target remote :3333
+
+set print asm-demangle on
+
 monitor arm semihosting enable
 
 # # send captured ITM to the file itm.fifo

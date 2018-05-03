@@ -1,6 +1,9 @@
+#![feature(used)]
 #![no_std]
 
 extern crate cortex_m;
+extern crate cortex_m_rt;
+extern crate panic_abort;
 extern crate stm32f30x_hal as hal;
 extern crate rn4870;
 
@@ -41,9 +44,12 @@ fn main() {
     let mut delay = Delay::new(cp.SYST, clocks);
 
     // Set up BLE
+    asm::bkpt();
     let mut ble = rn4870::Rn4870::new(serial, reset_ble);
+    asm::bkpt();
 
     let result = ble.hard_reset(&mut delay);
+    asm::bkpt();
     if result.is_err() { panic!("Error"); }
 
     let result = ble.enter_cmd_mode();
@@ -79,5 +85,13 @@ fn main() {
 
     // Break
     asm::bkpt()
+}
+
+#[link_section = ".vector_table.interrupts"]
+#[used]
+static INTERRUPTS: [extern "C" fn(); 240] = [default_handler; 240];
+
+extern "C" fn default_handler() {
+    loop {}
 }
 
