@@ -1,6 +1,8 @@
+#![feature(used)]
 #![no_std]
 
 extern crate cortex_m;
+extern crate panic_abort;
 extern crate stm32f30x_hal as hal;
 
 use hal::prelude::*;
@@ -31,3 +33,4 @@ fn main() {
         delay.delay_ms(1_000_u16);
     }
 }
+

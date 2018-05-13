@@ -2,7 +2,6 @@
 #![no_std]
 
 extern crate cortex_m;
-extern crate cortex_m_rt;
 extern crate panic_abort;
 extern crate stm32f30x_hal as hal;
 
@@ -33,13 +32,5 @@ fn main() {
         led1.set_low();
         delay.delay_ms(1_000_u16);
     }
-}
-
-#[link_section = ".vector_table.interrupts"]
-#[used]
-static INTERRUPTS: [extern "C" fn(); 240] = [default_handler; 240];
-
-extern "C" fn default_handler() {
-    loop {}
 }
 

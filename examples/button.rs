@@ -7,7 +7,7 @@ extern crate stm32f30x_hal as hal;
 
 use hal::prelude::*;
 use hal::stm32f30x;
-use hal::delay::Delay;
+use hal::spi::Spi;
 
 fn main() {
     let cp = cortex_m::Peripherals::take().unwrap();
@@ -19,19 +19,20 @@ fn main() {
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
     let mut gpiob = dp.GPIOB.split(&mut rcc.ahb);
-
-    /*
-    let mut extcomin = gpiob
-        .pb1
-        .into_push_pull_output(&mut gpiob.moder, &mut gpiob.otyper);
-    */
-    // PB1 is AF6 and TIM1_ch3N or
-    //        AF2 and TIM3_ch4
-
-    rcc.apb1.enr().modify(|_, w| w.tim3en().enabled()); // Enable tim1
-    dp.TIM3.cr1.modify(|_, w| w.cen().set_bit()); // Enable counter
+    let mut gpioc = dp.GPIOC.split(&mut rcc.ahb);
+    
+    // Set up Pins
+    let mut button = gpiob.pb8
+        .into_pull_up_input(&mut gpiob.moder, &mut gpiob.pupdr);
+    let mut led = gpioc.pc13
+        .into_push_pull_output(&mut gpioc.moder, &mut gpioc.otyper);
 
     loop {
+        if button.is_low() {
+            led.set_low();
+        } else {
+            led.set_high();
+        }
     }
 }
 
