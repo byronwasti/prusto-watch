@@ -26,6 +26,8 @@ use hal::gpio::{gpiob, gpioc, Input, Output, PullUp, PushPull, AF7};
 use ls010b7dh01::Ls010b7dh01;
 use graphics::prelude::*;
 use graphics::primitives::{Circle, Line, Rect};
+use graphics::transform::Transform;
+use graphics::image::Image1BPP;
 
 app! {
     device: hal::stm32f30x,
@@ -34,13 +36,13 @@ app! {
         static TOGGLE: bool = false;
         static TIME: u8 = 0;
         static STATE: State = State::Time;
+        static EXTI: hal::stm32f30x::EXTI;
+        static RESET_BLE: bool = true;
 
         // Late Resources
         static EXTCOMIN: display::Extcomin;
         static DISPLAY: display::Display;
         static BLE: ble::Ble;
-        //static LED: gpioc::PC13<Output<PushPull>>;
-        //static BUTTON: gpiob::PB8<Input<PullUp>>;
     },
 
     tasks: {
@@ -51,7 +53,8 @@ app! {
 
         SYS_TICK: {
             path: sys_tick,
-            resources: [TOGGLE, EXTCOMIN, DISPLAY, TIME],
+            resources: [TOGGLE, EXTCOMIN, DISPLAY,
+                TIME, BLE, RESET_BLE],
         },
 
         USART1_EXTI25: {
@@ -63,10 +66,13 @@ app! {
             enabled: true,
             priority: 1,
             path: exti9_5,
-            resources: [STATE],
-            //resources: [LED, BUTTON],
-            //resources: [LED],
-        }
+            resources: [STATE, EXTI],
+        },
+
+        EXTI15_10: {
+            path: exti15_10,
+            resources: [STATE, EXTI],
+        },
     },
 }
 
@@ -97,7 +103,7 @@ fn init(mut p: init::Peripherals, _r: init::Resources) -> init::LateResources {
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
     let mut timer = Timer::tim7(p.device.TIM7, 1.hz(), clocks, &mut rcc.apb1);
     //timer.listen(timer::Event::TimeOut);
-    let delay = Delay::new(p.core.SYST, clocks);
+    let mut delay = Delay::new(p.core.SYST, clocks);
 
     // Set up our GPIO pins
     let disp_en = gpiob.pb2.into_push_pull_output(
@@ -120,12 +126,6 @@ fn init(mut p: init::Peripherals, _r: init::Resources) -> init::LateResources {
         &mut gpiob.moder,
         &mut gpiob.otyper,
     );
-    /*
-    let mut led = gpioc.pc13.into_push_pull_output(
-        &mut gpioc.moder,
-        &mut gpioc.otyper,
-    );
-    */
     let sck = gpioa.pa5.into_af5(&mut gpioa.moder, &mut gpioa.afrl);
     let miso = gpioa.pa6.into_af5(&mut gpioa.moder, &mut gpioa.afrl);
     let mosi = gpioa.pa7.into_af5(&mut gpioa.moder, &mut gpioa.afrl);
@@ -170,12 +170,14 @@ fn init(mut p: init::Peripherals, _r: init::Resources) -> init::LateResources {
     // Set the default values
     v5_en.set_high();
     display.enable();
-    //led.set_high();
 
     // Set up syscfg to link GPIO to EXTI
     p.device.SYSCFG.exticr3.modify(|_, w| unsafe {
+        w.bits(0x11)
+        /* This does not work
         w.exti8().bits(0b001) // Port b
             .exti9().bits(0b001) // Port b
+        */
     });
     p.device.SYSCFG.exticr4.modify(|_, w| unsafe {
         w.exti13().bits(0b010) // Port c
@@ -192,6 +194,7 @@ fn init(mut p: init::Peripherals, _r: init::Resources) -> init::LateResources {
         DISPLAY: display,
         EXTCOMIN: extcomin,
         BLE: ble,
+        EXTI: p.device.EXTI,
     }
 }
 
@@ -202,37 +205,44 @@ fn idle() -> ! {
 }
 
 fn ble_message(_t: &mut Threshold, mut r: USART1_EXTI25::Resources) {
-    // TODO
+    asm::bkpt();
 }
 
 fn exti9_5(_t: &mut Threshold, mut r: EXTI9_5::Resources) {
+    if r.EXTI.pr1.read().pr8().bit_is_set() {
+        asm::bkpt();
+        r.EXTI.pr1.modify(|_, w| w.pr8().set_bit());
+    }
+
+    if r.EXTI.pr1.read().pr9().bit_is_set() {
+        asm::bkpt();
+        r.EXTI.pr1.modify(|_, w| w.pr9().set_bit());
+    }
+}
+
+fn exti15_10(_t: &mut Threshold, mut r: EXTI15_10::Resources) {
+    if r.EXTI.pr1.read().pr13().bit_is_set() {
+        r.EXTI.pr1.modify(|_, w| w.pr13().set_bit());
+    }
+
     asm::bkpt();
 }
 
 fn tick(_t: &mut Threshold, mut r: TIM7::Resources) {
-    /*
-    let toggle = *r.TOGGLE;
-    let extcomin = &mut *r.EXTCOMIN;
-    let display = &mut *r.DISPLAY;
-
-    if toggle {
-        (*extcomin).set_high();
-
-        (*display).clear();
-        (*display).draw(Line::new((0, 0), (65, 65), 1).into_iter());
-        (*display).flush_buffer();
-    } else {
-        (*extcomin).set_low();
-    }
-
-    *r.TOGGLE = !toggle;
-    */
 }
 
 fn sys_tick(_t: &mut Threshold, mut r: SYS_TICK::Resources) {
     let toggle = *r.TOGGLE;
     let extcomin = &mut *r.EXTCOMIN;
-    //let led = &mut *r.LED;
+
+    /*
+    if *r.RESET_BLE {
+        r.BLE.hard_reset_on();
+        *r.RESET_BLE = false;
+    } else {
+        r.BLE.hard_reset_off();
+    }
+    */
 
     draw_time(&mut *r.DISPLAY, *r.TIME);
     *r.TIME += 1;
@@ -242,84 +252,41 @@ fn sys_tick(_t: &mut Threshold, mut r: SYS_TICK::Resources) {
 
     if toggle {
         (*extcomin).set_high();
-        //(*led).set_high();
 
     } else {
-        //(*led).set_low();
         (*extcomin).set_low();
     }
 
     *r.TOGGLE = !toggle;
 }
 
-fn draw_face(mut display: &mut display::Display) {}
+fn draw_face(mut display: &mut display::Display) {
+    display.clear();
+    let bpp = Image1BPP::new(include_bytes!("../data/face_1bpp_neg.raw"), 120, 120)
+        .translate((0, 0));
+    display.draw(bpp.into_iter());
+    display.flush_buffer();
+
+}
 
 fn draw_time(mut display: &mut display::Display, time: u8) {
 
     let values = [
-        (125, 65),
-        (124, 71),
-        (123, 77),
-        (122, 83),
-        (119, 89),
-        (116, 94),
-        (113, 100),
-        (109, 105),
-        (105, 109),
-        (100, 113),
-        (95, 116),
-        (89, 119),
-        (83, 122),
-        (77, 123),
-        (71, 124),
+        (125, 65), (124, 71), (123, 77), (122, 83), (119, 89),
+        (116, 94), (113, 100), (109, 105), (105, 109), (100, 113),
+        (95, 116), (89, 119), (83, 122), (77, 123), (71, 124),
 
-        (65, 125),
-        (59, 124),
-        (53, 123),
-        (47, 122),
-        (41, 119),
-        (36, 116),
-        (30, 113),
-        (25, 109),
-        (21, 105),
-        (17, 100),
-        (14, 95),
-        (11, 89),
-        (8, 83),
-        (7, 77),
-        (6, 71),
+        (65, 125), (59, 124), (53, 123), (47, 122), (41, 119),
+        (36, 116), (30, 113), (25, 109), (21, 105), (17, 100),
+        (14, 95), (11, 89), (8, 83), (7, 77), (6, 71),
 
-        (5, 65),
-        (6, 59),
-        (7, 53),
-        (8, 47),
-        (11, 41),
-        (14, 36),
-        (17, 30),
-        (21, 25),
-        (25, 21),
-        (30, 17),
-        (35, 14),
-        (41, 11),
-        (47, 8),
-        (53, 7),
-        (59, 6),
+        (5, 65), (6, 59), (7, 53), (8, 47), (11, 41),
+        (14, 36), (17, 30), (21, 25), (25, 21), (30, 17),
+        (35, 14), (41, 11), (47, 8), (53, 7), (59, 6),
 
-        (65, 5),
-        (71, 6),
-        (77, 7),
-        (83, 8),
-        (89, 11),
-        (94, 14),
-        (100, 17),
-        (105, 21),
-        (109, 25),
-        (113, 30),
-        (116, 35),
-        (119, 41),
-        (122, 47),
-        (123, 53),
-        (124, 59),
+        (65, 5), (71, 6), (77, 7), (83, 8), (89, 11),
+        (94, 14), (100, 17), (105, 21), (109, 25), (113, 30),
+        (116, 35), (119, 41), (122, 47), (123, 53), (124, 59),
     ];
 
 

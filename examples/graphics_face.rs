@@ -21,8 +21,6 @@ use graphics::transform::Transform;
 use graphics::image::Image1BPP;
 
 fn main() {
-    //asm::bkpt();
-
     let cp = cortex_m::Peripherals::take().unwrap();
     let p = stm32f30x::Peripherals::take().unwrap();
 
