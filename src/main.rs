@@ -8,6 +8,7 @@ extern crate ls010b7dh01;
 extern crate rn4870;
 extern crate embedded_graphics as graphics;
 extern crate panic_abort;
+extern crate nb;
 
 mod display;
 mod ble;
@@ -26,6 +27,7 @@ use hal::gpio::{gpiob, gpioc, Input, Output, PullUp, PushPull, AF7};
 use ls010b7dh01::Ls010b7dh01;
 use graphics::prelude::*;
 use graphics::primitives::{Circle, Line, Rect};
+use graphics::fonts::{Font, Font6x8};
 use graphics::transform::Transform;
 use graphics::image::Image1BPP;
 
@@ -35,9 +37,12 @@ app! {
     resources: {
         static TOGGLE: bool = false;
         static TIME: u8 = 0;
-        static STATE: State = State::Time;
+        static STATE: State = State::Ble;
         static EXTI: hal::stm32f30x::EXTI;
         static RESET_BLE: bool = true;
+        static REDRAW: bool = true;
+        static DRAW_BUFFER: [u8; 16] = [32; 16];
+        static BUFFER_POS: u8 = 0;
 
         // Late Resources
         static EXTCOMIN: display::Extcomin;
@@ -54,12 +59,13 @@ app! {
         SYS_TICK: {
             path: sys_tick,
             resources: [TOGGLE, EXTCOMIN, DISPLAY,
-                TIME, BLE, RESET_BLE],
+                TIME, BLE, RESET_BLE, STATE, REDRAW,
+                DRAW_BUFFER],
         },
 
         USART1_EXTI25: {
             path: ble_message,
-            resources: [BLE],
+            resources: [BLE, DRAW_BUFFER, BUFFER_POS],
         },
 
         EXTI9_5: {
@@ -77,6 +83,7 @@ app! {
 }
 
 pub enum State {
+    Ble,
     Time,
     Face,
 }
@@ -164,7 +171,7 @@ fn init(mut p: init::Peripherals, _r: init::Resources) -> init::LateResources {
         clocks,
         &mut rcc.apb2,
     );
-    serial.listen(serial::Event::Rxne);
+    serial.listen(serial::Event::Rxne); // TODO: Serial interrupts?
     let mut ble = rn4870::Rn4870::new(serial, reset_ble);
 
     // Set the default values
@@ -205,27 +212,42 @@ fn idle() -> ! {
 }
 
 fn ble_message(_t: &mut Threshold, mut r: USART1_EXTI25::Resources) {
-    asm::bkpt();
+    let res = r.BLE.read_raw();
+    match res {
+        Ok(n) => {
+            if n < 32 {
+                return
+            }
+            (*r.DRAW_BUFFER)[*r.BUFFER_POS as usize] = n;
+            *r.BUFFER_POS += 1;
+            if *r.BUFFER_POS == 16 {
+                *r.BUFFER_POS = 0;
+            }
+        }
+        Err(nb::Error::Other(_)) => {
+            r.BLE.handle_error(|uart| { uart.clear_overflow_error(); } );
+        }
+        Err(nb::Error::WouldBlock) => {}
+    }
 }
 
 fn exti9_5(_t: &mut Threshold, mut r: EXTI9_5::Resources) {
     if r.EXTI.pr1.read().pr8().bit_is_set() {
-        asm::bkpt();
         r.EXTI.pr1.modify(|_, w| w.pr8().set_bit());
     }
 
     if r.EXTI.pr1.read().pr9().bit_is_set() {
-        asm::bkpt();
         r.EXTI.pr1.modify(|_, w| w.pr9().set_bit());
+        *r.STATE = State::Time;
     }
 }
 
 fn exti15_10(_t: &mut Threshold, mut r: EXTI15_10::Resources) {
     if r.EXTI.pr1.read().pr13().bit_is_set() {
         r.EXTI.pr1.modify(|_, w| w.pr13().set_bit());
-    }
 
-    asm::bkpt();
+        *r.STATE = State::Face;
+    }
 }
 
 fn tick(_t: &mut Threshold, mut r: TIM7::Resources) {
@@ -235,21 +257,42 @@ fn sys_tick(_t: &mut Threshold, mut r: SYS_TICK::Resources) {
     let toggle = *r.TOGGLE;
     let extcomin = &mut *r.EXTCOMIN;
 
-    /*
     if *r.RESET_BLE {
         r.BLE.hard_reset_on();
         *r.RESET_BLE = false;
     } else {
         r.BLE.hard_reset_off();
     }
-    */
 
-    draw_time(&mut *r.DISPLAY, *r.TIME);
-    *r.TIME += 1;
-    if *r.TIME == 60 {
-        *r.TIME = 0;
+    match *r.STATE {
+        State::Ble => {
+            r.DISPLAY.clear();
+            //let s = String::from_utf8_lossy(&*r.DRAW_BUFFER);
+            unsafe { 
+                let s = &*(&*r.DRAW_BUFFER as *const [u8] as *const str); 
+                r.DISPLAY.draw(Font6x8::render_str(s).translate((5, 50)).into_iter());
+                r.DISPLAY.flush_buffer();
+            }
+        }
+        State::Time => {
+            *r.REDRAW = true;
+
+            draw_time(&mut *r.DISPLAY, *r.TIME);
+            *r.TIME += 1;
+            if *r.TIME == 60 {
+                *r.TIME = 0;
+            }
+        }
+        State::Face => {
+            if *r.REDRAW {
+                draw_face(&mut *r.DISPLAY);
+                *r.REDRAW = false;
+            }
+        }
     }
 
+
+    // Toggle extcomin manually
     if toggle {
         (*extcomin).set_high();
 
@@ -293,4 +336,7 @@ fn draw_time(mut display: &mut display::Display, time: u8) {
     display.clear();
     display.draw(Line::new((65, 65), values[time as usize], 1).into_iter());
     display.flush_buffer();
+}
+
+fn draw_buffer(buffer: &[u8]) {
 }

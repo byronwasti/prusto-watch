@@ -2,6 +2,7 @@
 
 extern crate cortex_m;
 extern crate stm32f30x_hal as hal;
+extern crate panic_abort;
 #[macro_use(block)]
 extern crate nb;
 extern crate cortex_m_semihosting as semihosting;
@@ -28,7 +29,7 @@ fn main() {
 
     // Set up Reset BLE line
     let mut reset_ble = gpiob
-        .pb12
+        .pb5
         .into_push_pull_output(&mut gpiob.moder, &mut gpiob.otyper);
 
     let mut delay = Delay::new(cp.SYST, clocks);
