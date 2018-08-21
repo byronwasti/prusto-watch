@@ -1,9 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-radius = 55
-offset = (65, 65)
-divisions = 12
+radius = 45
+offset = (64, 64)
+divisions = 60
 
 def calc_pixels(radius, offset, divisions):
     rads = [ (i * (np.pi/(divisions/2))) for i in range(divisions) ]

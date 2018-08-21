@@ -37,7 +37,7 @@ app! {
     resources: {
         static TOGGLE: bool = false;
         static TIME: u8 = 0;
-        static STATE: State = State::Ble;
+        static STATE: State = State::Time;
         static EXTI: hal::stm32f30x::EXTI;
         static RESET_BLE: bool = true;
         static REDRAW: bool = true;
@@ -234,6 +234,7 @@ fn ble_message(_t: &mut Threshold, mut r: USART1_EXTI25::Resources) {
 fn exti9_5(_t: &mut Threshold, mut r: EXTI9_5::Resources) {
     if r.EXTI.pr1.read().pr8().bit_is_set() {
         r.EXTI.pr1.modify(|_, w| w.pr8().set_bit());
+        *r.STATE = State::Ble;
     }
 
     if r.EXTI.pr1.read().pr9().bit_is_set() {
@@ -313,7 +314,9 @@ fn draw_face(mut display: &mut display::Display) {
 }
 
 fn draw_time(mut display: &mut display::Display, time: u8) {
+    display.clear();
 
+    /*
     let values = [
         (125, 65), (124, 71), (123, 77), (122, 83), (119, 89),
         (116, 94), (113, 100), (109, 105), (105, 109), (100, 113),
@@ -331,9 +334,26 @@ fn draw_time(mut display: &mut display::Display, time: u8) {
         (94, 14), (100, 17), (105, 21), (109, 25), (113, 30),
         (116, 35), (119, 41), (122, 47), (123, 53), (124, 59),
     ];
+    */
+    let values =[(109, 64), (108, 68), (108, 73), (106, 77), (105, 82), (102, 86), (100, 90), (97, 94), (94, 97), (90, 100), (86, 102), (82, 105), (77, 106), (73, 108), (68, 108), (64, 109), (60, 108), (55, 108), (51, 106), (46, 105), (42, 102), (38, 100), (34, 97), (31, 94), (28, 90), (26, 86), (23, 82), (22, 77), (20, 73), (20, 68), (19, 64), (20, 60), (20, 55), (22, 51), (23, 46), (26, 42), (28, 38), (31, 34), (34, 31), (38, 28), (42, 26), (46, 23), (51, 22), (55, 20), (60, 20), (64, 19), (68, 20), (73, 20), (77, 22), (82, 23), (86, 26), (90, 28), (94, 31), (97, 34), (100, 38), (102, 42), (105, 46), (106, 51), (108, 55), (108, 60)];
 
 
-    display.clear();
+    let digits = [(116, 60), (108, 87), (88, 107), (61, 115), (34, 107), (14, 87), (6, 60), (14, 33), (34, 13), (61, 5), (88, 13), (108, 33)];
+        
+    display.draw(Font6x8::render_str("3").translate(digits[0]).into_iter());
+    display.draw(Font6x8::render_str("4").translate(digits[1]).into_iter());
+    display.draw(Font6x8::render_str("5").translate(digits[2]).into_iter());
+    display.draw(Font6x8::render_str("6").translate(digits[3]).into_iter());
+    display.draw(Font6x8::render_str("7").translate(digits[4]).into_iter());
+    display.draw(Font6x8::render_str("8").translate(digits[5]).into_iter());
+    display.draw(Font6x8::render_str("9").translate(digits[6]).into_iter());
+    display.draw(Font6x8::render_str("10").translate(digits[7]).into_iter());
+    display.draw(Font6x8::render_str("11").translate(digits[8]).into_iter());
+    display.draw(Font6x8::render_str("12").translate(digits[9]).into_iter());
+    display.draw(Font6x8::render_str("1").translate(digits[10]).into_iter());
+    display.draw(Font6x8::render_str("2").translate(digits[11]).into_iter());
+
+
     display.draw(Line::new((65, 65), values[time as usize], 1).into_iter());
     display.flush_buffer();
 }
